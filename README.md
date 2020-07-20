@@ -40,7 +40,7 @@ version: '3.5'
 
 services:
     test_app:
-        image: bizone_test:0.0.1
+        image: ismakov-dh/bi.zone_test:latest
         container_name: test_app
         restart: always
         environment:
