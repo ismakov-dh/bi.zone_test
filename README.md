@@ -38,7 +38,7 @@ version: '3.5'
 
 services:
     test_app:
-        image: ismakov-dh/bi.zone_test:latest
+        image: damirchikr/bi.zone_test:latest
         container_name: test_app
         restart: always
         environment:
