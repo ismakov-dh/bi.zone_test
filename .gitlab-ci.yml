@@ -1,0 +1,45 @@
+image: docker:stable
+  
+services:
+  - docker:dind
+
+variables:
+  DOCKER_DRIVER: overlay2
+
+stages:
+  - build
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+
+build:
+  stage: build
+  when: always
+  allow_failure: false
+  except:
+    - tags
+  tags:
+    - docker
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:${CONTAINER_TAG:-staging} || true
+    - docker build . --cache-from $CI_REGISTRY_IMAGE:${CONTAINER_TAG:-staging} -t $CI_REGISTRY_IMAGE:${CONTAINER_TAG:-staging}
+    - docker push $CI_REGISTRY_IMAGE:${CONTAINER_TAG:-staging}
+
+build-production:
+  stage: build
+  only:
+    - tags
+  tags:
+    - docker
+  script:
+    - export DOCKER_COMPATIBLE_TAG=${CI_COMMIT_TAG////-}
+    - echo $DOCKER_COMPATIBLE_TAG
+    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    - docker build .
+      --cache-from $CI_REGISTRY_IMAGE:latest
+      -t $CI_REGISTRY_IMAGE:$DOCKER_COMPATIBLE_TAG
+      -t $CI_REGISTRY_IMAGE:latest
+      -t $CI_REGISTRY_IMAGE:staging
+    - docker push $CI_REGISTRY_IMAGE:$DOCKER_COMPATIBLE_TAG
+    - docker push $CI_REGISTRY_IMAGE:latest
+    - docker push $CI_REGISTRY_IMAGE:staging
