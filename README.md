@@ -4,7 +4,15 @@ Default host and port are:
 ```
 0.0.0.0:5000
 ```
+*Example curl request command:*
+```
+curl -X POST -H 'Content-Type: application/json' -d '{"x":5, "y":4, "map": [[1,1,1,1,0],[1,1,0,1,0],[1,1,0,0,0],[0,0,0,0,0]]}' http://localhost:5000/api/islands
+```
+*Example response:*
 
+```
+{"count":1}
+```
 
 # Set another ip and port
 
@@ -14,16 +22,6 @@ Default host and port are:
 ```
 ENDPOINT_HOST = '127.0.0.1'
 ENDPOINT_PORT = 3000
-```
-
-*Example curl request command:*
-```
-curl -X POST -H 'Content-Type: application/json' -d '{"x":5, "y":4, "map": [[1,1,1,1,0],[1,1,0,1,0],[1,1,0,0,0],[0,0,0,0,0]]}' http://localhost:5000/api/islands
-```
-*Example response:*
-
-```
-{"count":1}
 ```
 
 # Docker
